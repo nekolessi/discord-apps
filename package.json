@@ -9,12 +9,12 @@
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsup src/index.ts --format esm --out-dir dist --clean --sourcemap",
+    "build": "tsup src/index.ts register.ts --format esm --out-dir dist --clean --sourcemap",
     "start": "node --enable-source-maps dist/index.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "check": "pnpm typecheck && pnpm lint",
-    "register:guild": "tsx src/register.ts --scope guild",
-    "register:global": "tsx src/register.ts --scope global",
+    "register:guild": "tsx register.ts --scope guild",
+    "register:global": "tsx register.ts --scope global",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write ."
