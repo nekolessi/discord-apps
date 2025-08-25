@@ -77,4 +77,4 @@ docker run --rm -it --env-file .env discord-bot:latest
 
 
 ## 📄 License
-MIT
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) © 2025 [nekolessi](https://github.com/nekolessi) made with ❤️ and a dangerous amount of caffeine.
