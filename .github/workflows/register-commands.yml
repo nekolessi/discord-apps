@@ -31,15 +31,35 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      # Map credentials from Secrets first, then fall back to Repository Variables
       - name: Register commands
         env:
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN || vars.DISCORD_TOKEN }}
+          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID || vars.DISCORD_CLIENT_ID }}
+          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID || vars.DISCORD_GUILD_ID }}
+          SCOPE: ${{ github.event.inputs.scope }}
         run: |
           set -euo pipefail
-          SCOPE="${{ github.event.inputs.scope }}"
+
+          # Validate env (print friendly errors, avoid leaking values)
+          missing=0
+          for k in DISCORD_TOKEN DISCORD_CLIENT_ID; do
+            if [ -z "${!k:-}" ]; then
+              echo "::error title=Missing $k::Set $k in GitHub > Settings > Secrets and variables"
+              missing=1
+            fi
+          done
+          if [ "${SCOPE}" = "guild" ] && [ -z "${DISCORD_GUILD_ID:-}" ]; then
+            echo "::error title=Missing DISCORD_GUILD_ID::Required when scope is 'guild'"
+            missing=1
+          fi
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
           echo "Registering commands for scope: ${SCOPE}"
+
+          # If your package.json scripts are patched to use root register.ts:
           if [ "${SCOPE}" = "global" ]; then
             pnpm run register:global
           else

@@ -13,7 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Use pnpm version from package.json (packageManager)
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
 
