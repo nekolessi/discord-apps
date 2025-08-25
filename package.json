@@ -1,0 +1,35 @@
+{
+"name": "discord-bot-repo",
+"version": "1.0.0",
+"private": true,
+"type": "module",
+"engines": {
+"node": ">=20.0.0"
+},
+"scripts": {
+"dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+"build": "tsc -p tsconfig.json",
+"start": "node dist/index.js",
+"register:guild": "ts-node src/register.ts --scope guild",
+"register:global": "ts-node src/register.ts --scope global",
+"lint": "eslint .",
+"format": "prettier --write ."
+},
+"dependencies": {
+"discord.js": "^14.16.0",
+"dotenv": "^16.4.5",
+"pino": "^9.3.2",
+"pino-pretty": "^11.3.0",
+"zod": "^3.23.8"
+},
+"devDependencies": {
+"@types/node": "^22.5.4",
+"eslint": "^9.10.0",
+"eslint-config-prettier": "^9.1.0",
+"eslint-plugin-import": "^2.29.1",
+"prettier": "^3.3.3",
+"ts-node": "^10.9.2",
+"ts-node-dev": "^2.0.0",
+"typescript": "^5.5.4"
+}
+}
