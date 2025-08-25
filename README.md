@@ -41,7 +41,8 @@ pnpm build && pnpm start
 - `start` – run compiled JS
 - `register:guild` – register commands to a specific guild (fast)
 - `register:global` – register commands globally (propagation can take up to 1 hour)
-- `lint` / `format` – code quality tools
+- `typecheck` - strict TS type checking
+- `lint` `lint:fix` `format` `check` – code quality tools
 
 
 ## 🧩 Adding a New Command
@@ -51,13 +52,7 @@ pnpm build && pnpm start
 
 
 ## 🔐 Environment Variables (`.env`)
-```
-DISCORD_TOKEN=your-bot-token
-APP_ID=your-application-id # Required for global registration
-GUILD_ID=your-test-guild-id # For guild registration (dev)
-NODE_ENV=development
-LOG_PRETTY=true
-```
+See `.env.example`
 
 
 ## 🐳 Docker
@@ -71,7 +66,7 @@ docker run --rm -it --env-file .env discord-bot:latest
 
 ## 🧪 Testing the Bot Locally
 - Invite the bot to your guild with the proper scopes: `bot applications.commands`.
-- Use guild registration while iterating (`register:guild`).
+- Prefer guild registration while iterating (`register:guild`).
 
 
 ## 📄 License
