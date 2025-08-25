@@ -1,11 +1,11 @@
 # Neko's Discord Apps Repo (TypeScript + discord.js v14)
 
-[![CI](https://github.com/nekolessi/discord-apps/actions/workflows/ci.yml/badge.svg)](https://github.com/nekolessi/discord-apps/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Docker](https://img.shields.io/docker/pulls/mekolessi/discord-apps)](https://hub.docker.com/r/nekolessi/discord-apps)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-green)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)](https://www.typescriptlang.org/)
 [![discord.js](https://img.shields.io/badge/discord.js-v14-blueviolet)](https://discord.js.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://github.com/nekolessi/discord-apps/actions/workflows/ci.yml/badge.svg)](https://github.com/nekolessi/discord-apps/actions/workflows/ci.yml)
 [![Lint](https://img.shields.io/github/actions/workflow/status/nekolessi/discord-apps/ci.yml?label=lint)](https://github.com/nekolessi/discord-apps/actions)
 
 A batteries‑included template for building Discord bots with TypeScript, slash commands, Docker, and CI.
