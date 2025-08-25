@@ -1,0 +1,12 @@
+node_modules
+.pnpm-store
+.git
+.github
+.vscode
+.idea
+.env
+*.log
+Dockerfile
+README.md
+**/*.ts
+!src/**
