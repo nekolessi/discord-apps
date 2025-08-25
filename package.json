@@ -3,16 +3,20 @@
 "version": "1.0.0",
 "private": true,
 "type": "module",
+"packageManager": "pnpm@9",
 "engines": {
 "node": ">=20.0.0"
 },
 "scripts": {
-"dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-"build": "tsc -p tsconfig.json",
-"start": "node dist/index.js",
-"register:guild": "ts-node src/register.ts --scope guild",
-"register:global": "ts-node src/register.ts --scope global",
+"dev": "tsx watch src/index.ts",
+"build": "tsup src/index.ts --format esm --out-dir dist --clean --dts false --sourcemap",
+"start": "node --enable-source-maps dist/index.js",
+"typecheck": "tsc -p tsconfig.build.json --noEmit",
+"check": "pnpm typecheck && pnpm lint",
+"register:guild": "tsx src/register.ts --scope guild",
+"register:global": "tsx src/register.ts --scope global",
 "lint": "eslint .",
+"lint:fix": "eslint . --fix",
 "format": "prettier --write ."
 },
 "dependencies": {
@@ -28,8 +32,8 @@
 "eslint-config-prettier": "^9.1.0",
 "eslint-plugin-import": "^2.29.1",
 "prettier": "^3.3.3",
-"ts-node": "^10.9.2",
-"ts-node-dev": "^2.0.0",
+"tsup": "^8.2.4",
+"tsx": "^4.16.2",
 "typescript": "^5.5.4"
 }
 }
