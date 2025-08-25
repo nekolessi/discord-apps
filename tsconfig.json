@@ -18,6 +18,6 @@
     "outDir": "dist",
     "sourceMap": true
   },
-  "include": ["src", "register.ts"],
+  "include": ["src", "register.ts", "types.ts"],
   "exclude": ["node_modules", "dist"]
 }

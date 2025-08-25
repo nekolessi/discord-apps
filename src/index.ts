@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits, Events, type Interaction } from "discord.js";
 import "dotenv/config";
-import type { SlashCommand } from "./types";
+import type { SlashCommand } from "../types";
 // import commands from src/commands
 import { echo } from "./commands/echo";
 import { ping } from "./commands/ping";
