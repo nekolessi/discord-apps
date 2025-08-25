@@ -1,50 +1,42 @@
 name: Register Commands
 
-
 on:
-workflow_dispatch:
-inputs:
-scope:
-description: 'Register scope (guild or global)'
-required: true
-default: 'guild'
-
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: "Register scope (guild or global)"
+        required: true
+        default: "guild"
 
 jobs:
-register:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout
-uses: actions/checkout@v4
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.2
 
-- name: Setup Node
-uses: actions/setup-node@v4
-with:
-node-version: 20
-cache: 'pnpm'
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-- name: Enable Corepack (pnpm)
-run: corepack enable
-
-
-- name: Pin pnpm version (optional but recommended)
-run: corepack prepare pnpm@9.0.0 --activate
-
-
-- name: Install deps
-run: pnpm i --frozen-lockfile || pnpm i
-
-
-- name: Register slash commands
-env:
-DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-APP_ID: ${{ secrets.APP_ID }}
-GUILD_ID: ${{ secrets.GUILD_ID }}
-run: |
-if [ "${{ github.event.inputs.scope }}" = "global" ]; then
-pnpm register:global
-else
-pnpm register:guild
-fi
+      - name: Register slash commands
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          APP_ID: ${{ secrets.APP_ID }}
+          GUILD_ID: ${{ secrets.GUILD_ID }}
+        run: |
+          if [ "${{ github.event.inputs.scope }}" = "global" ]; then
+            pnpm register:global
+          else
+            pnpm register:guild
+          fi

@@ -1,45 +1,35 @@
 name: CI
 
-
 on:
-push:
-branches: [ main ]
-pull_request:
-branches: [ main ]
-workflow_dispatch: {}
-
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
-build:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout
-uses: actions/checkout@v4
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.2
 
-- name: Setup Node.js
-uses: actions/setup-node@v4
-with:
-node-version: 20
-cache: 'pnpm'
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-- name: Enable Corepack (pnpm)
-run: corepack enable
+      - name: Lint
+        run: pnpm lint
 
-
-- name: Pin pnpm version (optional but recommended)
-run: corepack prepare pnpm@9.0.0 --activate
-
-
-- name: Install dependencies
-run: pnpm i --frozen-lockfile || pnpm i
-
-
-- name: Typecheck / Build
-run: pnpm build
-
-
-# Uncomment if you want lint to run in CI as well
-# - name: Lint
-# run: pnpm lint
+      - name: Build
+        run: pnpm build
