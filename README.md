@@ -1,4 +1,4 @@
-# Discord Bot Repo (TypeScript + discord.js v14)
+# Discord Apps Repo (TypeScript + discord.js v14)
 
 
 A batteries‑included template for building Discord bots with TypeScript, slash commands, Docker, and CI.
