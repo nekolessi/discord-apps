@@ -6,7 +6,7 @@
 [![discord.js](https://img.shields.io/badge/discord.js-v14-blueviolet)](https://discord.js.org/)
 [![Docker](https://img.shields.io/docker/pulls/mekolessi/discord-apps)](https://hub.docker.com/r/nekolessi/discord-apps)
 [![CI](https://github.com/nekolessi/discord-apps/actions/workflows/ci.yml/badge.svg)](https://github.com/nekolessi/discord-apps/actions/workflows/ci.yml)
-[![Lint](https://github.com/nekolessi/discord-apps/actions/workflows/lint.yml/badge.svg?branch=main)
+[!Lint](https://github.com/nekolessi/discord-apps/actions/workflows/lint.yml/badge.svg?branch=main)
 
 A batteries‑included template for building Discord bots with TypeScript, slash commands, Docker, and CI.
 
