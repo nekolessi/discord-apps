@@ -1,14 +1,17 @@
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js'
-import type { SlashCommand } from '../types.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from "discord.js";
+import type { SlashCommand } from "../types";
 
-
-export const command: SlashCommand = {
-data: new SlashCommandBuilder().setName('help').setDescription('List commands'),
-async execute(interaction) {
-const embed = new EmbedBuilder()
-.setTitle('Available Commands')
-.setDescription('`/ping`, `/echo`, `/help`')
-.setFooter({ text: 'Add more in src/commands' })
-await interaction.reply({ embeds: [embed], ephemeral: true })
-}
-}
+export const help: SlashCommand = {
+  data: new SlashCommandBuilder()
+    .setName("help")
+    .setDescription("List available commands"),
+  async execute(interaction: ChatInputCommandInteraction) {
+    const lines = [
+      "**Available commands:**",
+      "• `/ping` – reply with Pong and latency",
+      "• `/echo text:<message>` – echo your message",
+      "• `/help` – show this list",
+    ];
+    await interaction.reply(lines.join("\n"));
+  },
+};

@@ -1,16 +1,15 @@
-import { SlashCommandBuilder } from 'discord.js'
-import type { SlashCommand } from '../types.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from "discord.js";
+import type { SlashCommand } from "../types";
 
-
-export const command: SlashCommand = {
-data: new SlashCommandBuilder()
-.setName('echo')
-.setDescription('Echo back your message')
-.addStringOption(opt =>
-opt.setName('text').setDescription('What should I say?').setRequired(true)
-),
-async execute(interaction) {
-const text = interaction.options.getString('text', true)
-await interaction.reply({ content: text, ephemeral: false })
-}
-}
+export const echo: SlashCommand = {
+  data: new SlashCommandBuilder()
+    .setName("echo")
+    .setDescription("Echo back the provided text")
+    .addStringOption((o) =>
+      o.setName("text").setDescription("Text to echo").setRequired(true)
+    ),
+  async execute(interaction: ChatInputCommandInteraction) {
+    const text = interaction.options.getString("text", true);
+    await interaction.reply(text);
+  },
+};
