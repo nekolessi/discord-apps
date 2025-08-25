@@ -1,6 +1,18 @@
-import type { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
+// types.ts (repo root)
+import type {
+  ChatInputCommandInteraction,
+  SlashCommandBuilder,
+  SlashCommandOptionsOnlyBuilder,
+  SlashCommandSubcommandsOnlyBuilder,
+} from 'discord.js';
+
+// Allow all valid command builder shapes from discord.js
+export type SlashCommandData =
+  | SlashCommandBuilder
+  | SlashCommandOptionsOnlyBuilder
+  | SlashCommandSubcommandsOnlyBuilder;
 
 export interface SlashCommand {
-  data: SlashCommandBuilder;
-  execute: (interaction: ChatInputCommandInteraction) => Promise<void> | void;
+  data: SlashCommandData;
+  execute(interaction: ChatInputCommandInteraction): Promise<void>;
 }
