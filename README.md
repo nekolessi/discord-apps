@@ -1,4 +1,5 @@
 # Neko's Discord Apps Repo (TypeScript + discord.js v14)
+
 [![CI](https://github.com/your-org/discord-bot-repo/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/discord-bot-repo/actions/workflows/ci.yml)
 [![Docker](https://img.shields.io/docker/pulls/your-docker-username/discord-bot-repo)](https://hub.docker.com/r/your-docker-username/discord-bot-repo)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-green)](https://nodejs.org/)
