@@ -8,9 +8,7 @@ on:
         required: true
         default: "guild"
         type: choice
-        options:
-          - guild
-          - global
+        options: [guild, global]
 
 jobs:
   register:
@@ -20,10 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Use pnpm version from package.json (packageManager)
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node
         uses: actions/setup-node@v4
