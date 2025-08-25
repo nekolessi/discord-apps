@@ -1,4 +1,4 @@
-name: CI
+name: Lint
 
 
 on:
@@ -10,14 +10,14 @@ workflow_dispatch: {}
 
 
 jobs:
-build:
+lint:
 runs-on: ubuntu-latest
 steps:
 - name: Checkout
 uses: actions/checkout@v4
 
 
-- name: Setup Node.js
+- name: Setup Node
 uses: actions/setup-node@v4
 with:
 node-version: 20
@@ -32,14 +32,9 @@ run: corepack enable
 run: corepack prepare pnpm@9.0.0 --activate
 
 
-- name: Install dependencies
+- name: Install deps
 run: pnpm i --frozen-lockfile || pnpm i
 
 
-- name: Typecheck / Build
-run: pnpm build
-
-
-# Uncomment if you want lint to run in CI as well
-# - name: Lint
-# run: pnpm lint
+- name: Run ESLint
+run: pnpm lint

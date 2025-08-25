@@ -1,45 +1,50 @@
-name: Register Slash Commands
+name: Register Commands
+
 
 on:
-  workflow_dispatch:
-    inputs:
-      scope:
-        description: "Scope to register (guild or global)"
-        default: "guild"
-        required: true
+workflow_dispatch:
+inputs:
+scope:
+description: 'Register scope (guild or global)'
+required: true
+default: 'guild'
+
 
 jobs:
-  register:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    env:
-      DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-      APP_ID: ${{ secrets.APP_ID }}
-      GUILD_ID: ${{ secrets.GUILD_ID }}
-      NODE_ENV: production
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+register:
+runs-on: ubuntu-latest
+steps:
+- name: Checkout
+uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: '9'
+- name: Setup Node
+uses: actions/setup-node@v4
+with:
+node-version: 20
+cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
 
-      - name: Register commands (guild)
-        if: ${{ github.event.inputs.scope == 'guild' }}
-        run: pnpm register:guild
+- name: Enable Corepack (pnpm)
+run: corepack enable
 
-      - name: Register commands (global)
-        if: ${{ github.event.inputs.scope == 'global' }}
-        run: pnpm register:global
+
+- name: Pin pnpm version (optional but recommended)
+run: corepack prepare pnpm@9.0.0 --activate
+
+
+- name: Install deps
+run: pnpm i --frozen-lockfile || pnpm i
+
+
+- name: Register slash commands
+env:
+DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+APP_ID: ${{ secrets.APP_ID }}
+GUILD_ID: ${{ secrets.GUILD_ID }}
+run: |
+if [ "${{ github.event.inputs.scope }}" = "global" ]; then
+pnpm register:global
+else
+pnpm register:guild
+fi
