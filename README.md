@@ -5,16 +5,16 @@ A batteries‑included template for building Discord bots with TypeScript, slash
 
 
 ## ✨ Features
-- **TypeScript** with strict config
-- **discord.js v14** with slash commands
-- Clear **command architecture** (add commands in `src/commands`)
-- **Command registrar** script for global or guild‑scoped commands
-- **Pino** logging + pretty output in dev
-- **.env** for secrets, **Dockerfile**, and **GitHub Actions CI**
+- TypeScript with strict config
+- discord.js v14 with slash commands
+- Clear command architecture (add commands in `src/commands`)
+- Command registrar for global or guild scope
+- Pino logging + pretty output in dev
+- `.env` for secrets, Dockerfile, and GitHub Actions CI
 
 
 ## 🚀 Quick Start
-1. **Clone & Install**
+1. **Install**
 ```bash
 pnpm i # or npm i / yarn
 ```
