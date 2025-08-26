@@ -28,6 +28,12 @@ A batteries‑included template for building Discord bots with TypeScript, slash
         ├── echo.ts
         └── help.ts
 ```
+## Prerequisites
+
+- **Node.js ≥ 20**
+- **pnpm** (the repo pins a version via `packageManager` in `package.json`)
+- A **Discord application** with a **Bot** created in the Discord Developer Portal
+- **Permissions**: make sure your bot has the *applications.commands* scope and is invited with the proper permissions to your guild if you’ll test guild commands.
 
 ---
 
