@@ -10,6 +10,26 @@
 
 A batteries‑included template for building Discord bots with TypeScript, slash commands, Docker, and CI.
 
+## Project Structure
+
+```
+.
+├── package.json
+├── tsconfig.json
+├── register.ts          # registers slash commands (guild/global)
+├── types.ts             # shared types for commands
+├── .github/workflows/
+│   ├── ci.yml
+│   └── register-commands.yml
+└── src/
+    ├── index.ts         # bot runtime
+    └── commands/
+        ├── ping.ts
+        ├── echo.ts
+        └── help.ts
+```
+
+---
 
 ## ✨ Features
 - TypeScript with strict config
