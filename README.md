@@ -85,8 +85,23 @@ pnpm build && pnpm start
 
 
 ## 🔐 Environment Variables (`.env`)
-See `.env.example`
 
+Create a `.env` file (for local use) at the repo root:
+
+```env
+DISCORD_TOKEN=YOUR_BOT_TOKEN
+DISCORD_CLIENT_ID=YOUR_APPLICATION_ID
+DISCORD_GUILD_ID=YOUR_SERVER_ID   # only required for guild-scope registration
+```
+
+> In CI, set these as **GitHub Actions Secrets** under  
+> Settings → Security → Secrets and variables → Actions → “New repository secret”.
+
+- `DISCORD_TOKEN`: the **Bot token** (Developer Portal → Bot → Reset/Copy token)
+- `DISCORD_CLIENT_ID`: the **Application (Client) ID** (Developer Portal → General Information)
+- `DISCORD_GUILD_ID`: your **Server ID** (enable Developer Mode in Discord → right-click server → Copy Server ID). Only needed for **guild** scope.
+
+---
 
 ## 🐳 Docker
 ```bash
