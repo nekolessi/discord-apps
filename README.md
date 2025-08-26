@@ -69,14 +69,19 @@ pnpm build && pnpm start
 
 
 ## 🔧 Scripts
-- `dev` – run with ts-node-dev (watch mode)
-- `build` – compile TypeScript
-- `start` – run compiled JS
-- `register:guild` – register commands to a specific guild (fast)
-- `register:global` – register commands globally (propagation can take up to 1 hour)
-- `typecheck` - strict TS type checking
-- `lint` `lint:fix` `format` `check` – code quality tools
+From `package.json`:
 
+- `pnpm dev` — run the bot in watch mode (using `src/index.ts`)
+- `pnpm build` — bundle `src/index.ts` (and optionally `register.ts` if included) to `dist/`
+- `pnpm start` — run the built bot (`dist/index.js`)
+- `pnpm typecheck` — `tsc --noEmit`
+- `pnpm check` — typecheck + lint
+- `pnpm lint` / `pnpm lint:fix`
+- `pnpm format` — Prettier
+- `pnpm run register:guild` — register commands to a single guild (fast propagation)
+- `pnpm run register:global` — register commands globally (can take ~1 hour to propagate)
+
+---
 
 ## 🧩 Adding a New Command
 1. Create a new file in `src/commands`, e.g. `src/commands/echo.ts`.
