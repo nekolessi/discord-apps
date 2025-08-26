@@ -10,6 +10,8 @@
 
 A batteries‑included template for building Discord bots with TypeScript, slash commands, Docker, and CI.
 
+---
+
 ## Project Structure
 
 ```
@@ -28,6 +30,9 @@ A batteries‑included template for building Discord bots with TypeScript, slash
         ├── echo.ts
         └── help.ts
 ```
+
+---
+
 ## Prerequisites
 
 - `Node.js ≥ 20`
@@ -45,6 +50,7 @@ A batteries‑included template for building Discord bots with TypeScript, slash
 - Pino logging + pretty output in dev
 - `.env` for secrets, Dockerfile, and GitHub Actions CI
 
+---
 
 ## 🚀 Quick Start
 1. **Install**
@@ -61,12 +67,12 @@ pnpm register:guild
 pnpm dev
 ```
 
-
 When ready for production:
 ```bash
 pnpm build && pnpm start
 ```
 
+---
 
 ## 🔧 Scripts
 From `package.json`:
@@ -160,8 +166,6 @@ DISCORD_GUILD_ID=YOUR_SERVER_ID   # only required for guild-scope registration
 
 ---
 
-## Deploy / CI
-
 ### Register commands via GitHub Actions
 - Workflow: `.github/workflows/register-commands.yml`
 - Run it from the **Actions** tab and choose scope: `guild` or `global`.
@@ -183,12 +187,42 @@ docker build -t discord-bot:latest .
 # Run container (pass env)
 docker run --rm -it --env-file .env discord-bot:latest
 ```
+---
 
+## Troubleshooting Checklist
+
+- ✅ Node 20+, pnpm installed  
+- ✅ `.env` present locally (or GitHub Secrets set in CI)  
+- ✅ `DISCORD_CLIENT_ID` matches the app of your `DISCORD_TOKEN`  
+- ✅ `DISCORD_GUILD_ID` set when using `--scope guild`  
+- ✅ Commands imported and included in both the runtime (`src/index.ts`) and `register.ts`
+
+---
+
+## Useful Commands (one-liners)
+
+```bash
+# install deps
+pnpm i
+
+# typecheck and lint
+pnpm typecheck
+pnpm lint
+
+# build & run
+pnpm build && pnpm start
+
+# register commands (guild/global)
+pnpm run register:guild
+pnpm run register:global
+```
+---
 
 ## 🧪 Testing the Bot Locally
 - Invite the bot to your guild with the proper scopes: `bot applications.commands`.
 - Prefer guild registration while iterating (`register:guild`).
 
+---
 
 ## 📄 License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) © 2025 [nekolessi](https://github.com/nekolessi) made with ❤️ and a dangerous amount of caffeine.
