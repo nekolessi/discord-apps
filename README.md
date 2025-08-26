@@ -1,4 +1,4 @@
-# Neko's Discord Apps Repo (TypeScript + discord.js v14)
+# 😽 Neko's Discord Apps Repo (TypeScript + discord.js v14)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-green)](https://nodejs.org/)
