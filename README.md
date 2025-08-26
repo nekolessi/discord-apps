@@ -87,8 +87,6 @@ From `package.json`:
 - `pnpm run register:guild` — register commands to a single guild (fast propagation)
 - `pnpm run register:global` — register commands globally (can take ~1 hour to propagate)
 
----
-
 1. Install deps:
    ```bash
    pnpm install
