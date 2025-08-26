@@ -83,11 +83,63 @@ From `package.json`:
 
 ---
 
-## 🧩 Adding a New Command
-1. Create a new file in `src/commands`, e.g. `src/commands/echo.ts`.
-2. Export a `SlashCommand` following the interface in `src/types.ts`.
-3. Re-run `pnpm register:guild` to publish updated slash commands.
+1. Install deps:
+   ```bash
+   pnpm install
+   ```
 
+2. Start the bot (dev mode):
+   ```bash
+   pnpm dev
+   ```
+
+3. Register slash commands:
+   - **Guild scope (recommended for testing):**
+     ```bash
+     pnpm run register:guild
+     ```
+   - **Global scope (production):**
+     ```bash
+     pnpm run register:global
+     ```
+
+4. Build & run the compiled bot:
+   ```bash
+   pnpm build
+   pnpm start
+   ```
+
+---
+
+## 🧩 Adding a New Command
+1. Create a new file under `src/commands/hello.ts`:
+
+   ```ts
+   import { SlashCommandBuilder, type ChatInputCommandInteraction } from "discord.js";
+   import type { SlashCommand } from "../../types";
+
+   export const hello: SlashCommand = {
+     data: new SlashCommandBuilder()
+       .setName("hello")
+       .setDescription("Say hi"),
+     async execute(interaction: ChatInputCommandInteraction) {
+       await interaction.reply("Hello there! 👋");
+     },
+   };
+   ```
+
+2. Import it where commands are aggregated:
+   - In `src/index.ts`, add it to your `commands` array if that’s where you dispatch.
+   - In `register.ts`, add it to the list that’s turned into `data.toJSON()` before upserting.
+
+3. Re-register commands:
+   ```bash
+   pnpm run register:guild
+   # or
+   pnpm run register:global
+   ```
+
+---
 
 ## 🔐 Environment Variables (`.env`)
 
@@ -105,6 +157,22 @@ DISCORD_GUILD_ID=YOUR_SERVER_ID   # only required for guild-scope registration
 - `DISCORD_TOKEN`: the **Bot token** (Developer Portal → Bot → Reset/Copy token)
 - `DISCORD_CLIENT_ID`: the **Application (Client) ID** (Developer Portal → General Information)
 - `DISCORD_GUILD_ID`: your **Server ID** (enable Developer Mode in Discord → right-click server → Copy Server ID). Only needed for **guild** scope.
+
+---
+
+## Deploy / CI
+
+### Register commands via GitHub Actions
+- Workflow: `.github/workflows/register-commands.yml`
+- Run it from the **Actions** tab and choose scope: `guild` or `global`.
+- Make sure repo **secrets** are set:
+  - `DISCORD_TOKEN`
+  - `DISCORD_CLIENT_ID`
+  - `DISCORD_GUILD_ID` (only for guild)
+
+### CI (lint/typecheck/build)
+- Workflow: `.github/workflows/ci.yml`
+- Runs on push/PR; uses the pnpm version from `package.json`’s `packageManager`.
 
 ---
 
