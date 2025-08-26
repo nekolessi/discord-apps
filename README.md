@@ -12,7 +12,7 @@ A batteries‑included template for building Discord bots with TypeScript, slash
 
 ---
 
-## Project Structure
+## 💾 Project Structure
 
 ```
 .
@@ -33,7 +33,7 @@ A batteries‑included template for building Discord bots with TypeScript, slash
 
 ---
 
-## Prerequisites
+## 💡 Prerequisites
 
 - `Node.js ≥ 20`
 - `pnpm` (the repo pins a version via `packageManager` in `package.json`)
@@ -164,7 +164,7 @@ DISCORD_GUILD_ID=YOUR_SERVER_ID   # only required for guild-scope registration
 
 ---
 
-### Register commands via GitHub Actions
+### 💽 Register commands via GitHub Actions
 - Workflow: `.github/workflows/register-commands.yml`
 - Run it from the **Actions** tab and choose scope: `guild` or `global`.
 - Make sure repo **secrets** are set:
@@ -172,7 +172,7 @@ DISCORD_GUILD_ID=YOUR_SERVER_ID   # only required for guild-scope registration
   - `DISCORD_CLIENT_ID`
   - `DISCORD_GUILD_ID` (only for guild)
 
-### CI (lint/typecheck/build)
+### 💻 CI (lint/typecheck/build)
 - Workflow: `.github/workflows/ci.yml`
 - Runs on push/PR; uses the pnpm version from `package.json`’s `packageManager`.
 
@@ -187,7 +187,7 @@ docker run --rm -it --env-file .env discord-bot:latest
 ```
 ---
 
-## Troubleshooting Checklist
+## 📝 Troubleshooting Checklist
 
 - ✅ Node 20+, pnpm installed  
 - ✅ `.env` present locally (or GitHub Secrets set in CI)  
@@ -197,7 +197,7 @@ docker run --rm -it --env-file .env discord-bot:latest
 
 ---
 
-## Useful Commands (one-liners)
+## 🔎 Useful Commands (one-liners)
 
 ```bash
 # install deps
