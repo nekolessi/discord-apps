@@ -10,6 +10,13 @@ on:
         type: choice
         options: [guild, global]
 
+permissions:
+  contents: read  # minimum needed to checkout code, fetch dependencies, etc.
+  # OPTIONAL elevated writes — uncomment ONLY if the job truly needs them (principle of least privilege):
+  # pull-requests: write  # e.g., annotate PRs, post review comments, update labels
+  # issues: write         # e.g., create/update issues
+
+
 jobs:
   register:
     runs-on: ubuntu-latest

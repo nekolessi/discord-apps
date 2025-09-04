@@ -7,6 +7,13 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+permissions:
+  contents: read  # minimum needed to checkout code, fetch dependencies, etc.
+  # OPTIONAL elevated writes — uncomment ONLY if the job truly needs them (principle of least privilege):
+  # pull-requests: write  # e.g., annotate PRs, post review comments, update labels
+  # issues: write         # e.g., create/update issues
+
+
 jobs:
   lint:
     runs-on: ubuntu-latest

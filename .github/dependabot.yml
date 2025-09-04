@@ -11,6 +11,7 @@ updates:
       prefix: "deps"
       include: "scope"
     versioning-strategy: increase
+    open-pull-requests-limit: 10
     groups:
       prod-dependencies:
         dependency-type: "production"
@@ -28,3 +29,4 @@ updates:
       time: "04:00"
     commit-message:
       prefix: "ci"
+    open-pull-requests-limit: 10
