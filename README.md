@@ -4,7 +4,7 @@
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-green)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)](https://www.typescriptlang.org/)
 [![discord.js](https://img.shields.io/badge/discord.js-v14-blueviolet)](https://discord.js.org/)
-[![Docker](https://img.shields.io/docker/pulls/mekolessi/discord-apps)](https://hub.docker.com/r/nekolessi/discord-apps)
+[![Docker](https://img.shields.io/badge/docker-ready-2496ED?logo=docker&logoColor=white)](Dockerfile)
 [![CI](https://github.com/nekolessi/discord-apps/actions/workflows/ci.yml/badge.svg)](https://github.com/nekolessi/discord-apps/actions/workflows/ci.yml)
 [![Lint](https://github.com/nekolessi/discord-apps/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/nekolessi/discord-apps/actions/workflows/lint.yml)
 
@@ -22,6 +22,7 @@ A batteries‑included template for building Discord bots with TypeScript, slash
 ├── types.ts             # shared types for commands
 ├── .github/workflows/
 │   ├── ci.yml
+│   ├── lint.yml
 │   └── register-commands.yml
 └── src/
     ├── index.ts         # bot runtime
@@ -78,7 +79,7 @@ pnpm build && pnpm start
 From `package.json`:
 
 - `pnpm dev` — run the bot in watch mode (using `src/index.ts`)
-- `pnpm build` — bundle `src/index.ts` (and optionally `register.ts` if included) to `dist/`
+- `pnpm build` — bundle `src/index.ts` and `register.ts` to `dist/`
 - `pnpm start` — run the built bot (`dist/src/index.js`)
 - `pnpm typecheck` — `tsc --noEmit`
 - `pnpm check` — typecheck + lint
