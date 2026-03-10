@@ -10,3 +10,5 @@ Dockerfile
 README.md
 **/*.ts
 !src/**
+!register.ts
+!types.ts

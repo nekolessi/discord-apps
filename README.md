@@ -57,7 +57,7 @@ A batteries‑included template for building Discord bots with TypeScript, slash
 ```bash
 pnpm i # or npm i / yarn
 ```
-2. **Configure** `.env` (see `.env.example`). You MUST set `DISCORD_TOKEN` and at least one of `GUILD_ID` or `APP_ID`.
+2. **Configure** `.env` (see `.env.example`). You MUST set `DISCORD_TOKEN` and `DISCORD_CLIENT_ID` (plus `DISCORD_GUILD_ID` for guild scope).
 3. **Register slash commands** (guild‑scoped for fast iteration):
 ```bash
 pnpm register:guild

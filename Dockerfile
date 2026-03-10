@@ -18,6 +18,7 @@ COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile
 COPY tsconfig.json tsconfig.build.json ./
 COPY src ./src
+COPY register.ts types.ts ./
 RUN pnpm build
 
 
