@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsup src/index.ts register.ts --format esm --out-dir dist --clean --sourcemap",
-    "start": "node --enable-source-maps dist/index.js",
+    "start": "node --enable-source-maps dist/src/index.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "check": "pnpm typecheck && pnpm lint",
     "register:guild": "tsx register.ts --scope guild",
@@ -55,3 +55,4 @@
     }
   }
 }
+

@@ -74,7 +74,7 @@ From `package.json`:
 
 - `pnpm dev` — run the bot in watch mode (using `src/index.ts`)
 - `pnpm build` — bundle `src/index.ts` (and optionally `register.ts` if included) to `dist/`
-- `pnpm start` — run the built bot (`dist/index.js`)
+- `pnpm start` — run the built bot (`dist/src/index.js`)
 - `pnpm typecheck` — `tsc --noEmit`
 - `pnpm check` — typecheck + lint
 - `pnpm lint` / `pnpm lint:fix`
@@ -238,3 +238,4 @@ pnpm run register:global
 ```
 
 Happy hacking! 🎮
+

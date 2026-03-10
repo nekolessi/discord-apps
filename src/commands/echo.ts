@@ -10,6 +10,9 @@ export const echo: SlashCommand = {
     ),
   async execute(interaction: ChatInputCommandInteraction) {
     const text = interaction.options.getString("text", true);
-    await interaction.reply(text);
+    await interaction.reply({
+      content: text,
+      allowedMentions: { parse: [] },
+    });
   },
 };

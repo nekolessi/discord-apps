@@ -40,3 +40,6 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Verify Build Artifact
+        run: test -f dist/src/index.js
