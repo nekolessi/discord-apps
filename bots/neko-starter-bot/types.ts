@@ -1,12 +1,10 @@
-// types.ts (repo root)
 import type {
   ChatInputCommandInteraction,
   SlashCommandBuilder,
   SlashCommandOptionsOnlyBuilder,
   SlashCommandSubcommandsOnlyBuilder,
-} from 'discord.js';
+} from "discord.js";
 
-// Allow all valid command builder shapes from discord.js
 export type SlashCommandData =
   | SlashCommandBuilder
   | SlashCommandOptionsOnlyBuilder

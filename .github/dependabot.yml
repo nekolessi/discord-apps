@@ -1,32 +1,20 @@
 version: 2
 updates:
-  # Keep npm (pnpm) dependencies updated
   - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "weekly"   # check once a week
-      day: "sunday"
-      time: "04:00"
-    commit-message:
-      prefix: "deps"
-      include: "scope"
-    versioning-strategy: increase
-    open-pull-requests-limit: 10
-    groups:
-      prod-dependencies:
-        dependency-type: "production"
-      dev-dependencies:
-        dependency-type: "development"
-    allow:
-      - dependency-type: "all"
-
-  # Keep GitHub Actions updated
-  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "sunday"
       time: "04:00"
     commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "04:10"
+    commit-message:
       prefix: "ci"
-    open-pull-requests-limit: 10

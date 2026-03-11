@@ -1,0 +1,85 @@
+name: Release Bot
+
+on:
+  workflow_dispatch:
+    inputs:
+      bot:
+        description: "Bot folder under bots/"
+        required: true
+        default: "neko-starter-bot"
+        type: string
+      version:
+        description: "Version label (example: v1.0.0)"
+        required: true
+        default: "v1.0.0"
+        type: string
+      publish_release:
+        description: "Publish a GitHub Release"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build selected bot
+        env:
+          BOT: ${{ github.event.inputs.bot }}
+        run: |
+          set -euo pipefail
+          if [ ! -f "bots/${BOT}/package.json" ]; then
+            echo "::error title=Invalid bot::bots/${BOT}/package.json not found"
+            exit 1
+          fi
+          pnpm --filter "./bots/${BOT}" build
+
+      - name: Create release zip
+        id: package
+        env:
+          BOT: ${{ github.event.inputs.bot }}
+          VERSION: ${{ github.event.inputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          ARTIFACT="${BOT}-${VERSION}.zip"
+          zip -r "dist/${ARTIFACT}" \
+            "bots/${BOT}/dist" \
+            "bots/${BOT}/README.md" \
+            "bots/${BOT}/.env.example" \
+            "bots/${BOT}/package.json" \
+            "LICENSE"
+          echo "artifact=${ARTIFACT}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.package.outputs.artifact }}
+          path: dist/${{ steps.package.outputs.artifact }}
+
+      - name: Publish GitHub Release
+        if: ${{ github.event.inputs.publish_release == 'true' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.bot }}-${{ github.event.inputs.version }}
+          name: ${{ github.event.inputs.bot }} ${{ github.event.inputs.version }}
+          files: dist/${{ steps.package.outputs.artifact }}

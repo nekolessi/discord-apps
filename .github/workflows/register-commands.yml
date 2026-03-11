@@ -3,6 +3,11 @@ name: Register Discord Commands
 on:
   workflow_dispatch:
     inputs:
+      bot:
+        description: "Bot folder under bots/"
+        required: true
+        default: "neko-starter-bot"
+        type: string
       scope:
         description: "Where to register commands"
         required: true
@@ -11,11 +16,7 @@ on:
         options: [guild, global]
 
 permissions:
-  contents: read  # minimum needed to checkout code, fetch dependencies, etc.
-  # OPTIONAL elevated writes — uncomment ONLY if the job truly needs them (principle of least privilege):
-  # pull-requests: write  # e.g., annotate PRs, post review comments, update labels
-  # issues: write         # e.g., create/update issues
-
+  contents: read
 
 jobs:
   register:
@@ -23,14 +24,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
-      # Use pnpm version from package.json (packageManager)
-      - name: Setup PNPM
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
@@ -38,37 +38,42 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      # Map credentials from Secrets first, then fall back to Repository Variables
       - name: Register commands
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN || vars.DISCORD_TOKEN }}
           DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID || vars.DISCORD_CLIENT_ID }}
           DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID || vars.DISCORD_GUILD_ID }}
+          BOT: ${{ github.event.inputs.bot }}
           SCOPE: ${{ github.event.inputs.scope }}
         run: |
           set -euo pipefail
 
-          # Validate env (print friendly errors, avoid leaking values)
+          if [ ! -f "bots/${BOT}/package.json" ]; then
+            echo "::error title=Invalid bot::bots/${BOT}/package.json not found"
+            exit 1
+          fi
+
           missing=0
           for k in DISCORD_TOKEN DISCORD_CLIENT_ID; do
             if [ -z "${!k:-}" ]; then
-              echo "::error title=Missing $k::Set $k in GitHub > Settings > Secrets and variables"
+              echo "::error title=Missing $k::Set $k in repo secrets or variables"
               missing=1
             fi
           done
+
           if [ "${SCOPE}" = "guild" ] && [ -z "${DISCORD_GUILD_ID:-}" ]; then
-            echo "::error title=Missing DISCORD_GUILD_ID::Required when scope is 'guild'"
+            echo "::error title=Missing DISCORD_GUILD_ID::Required for guild scope"
             missing=1
           fi
+
           if [ "$missing" -ne 0 ]; then
             exit 1
           fi
 
-          echo "Registering commands for scope: ${SCOPE}"
+          echo "Registering commands for bots/${BOT} with scope ${SCOPE}"
 
-          # If your package.json scripts are patched to use root register.ts:
           if [ "${SCOPE}" = "global" ]; then
-            pnpm run register:global
+            pnpm --filter "./bots/${BOT}" run register:global
           else
-            pnpm run register:guild
+            pnpm --filter "./bots/${BOT}" run register:guild
           fi

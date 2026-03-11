@@ -8,9 +8,9 @@ export const help: SlashCommand = {
   async execute(interaction: ChatInputCommandInteraction) {
     const lines = [
       "**Available commands:**",
-      "• `/ping` – reply with Pong and latency",
-      "• `/echo text:<message>` – echo your message",
-      "• `/help` – show this list",
+      "- `/ping` - reply with Pong and latency",
+      "- `/echo text:<message>` - echo your message",
+      "- `/help` - show this list",
     ];
     await interaction.reply(lines.join("\n"));
   },

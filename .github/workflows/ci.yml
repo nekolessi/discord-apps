@@ -2,29 +2,26 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: ["main"]
   pull_request:
+    branches: ["main"]
 
 permissions:
-  contents: read  # minimum needed to checkout code, fetch dependencies, etc.
-  # OPTIONAL elevated writes — uncomment ONLY if the job truly needs them (principle of least privilege):
-  # pull-requests: write  # e.g., annotate PRs, post review comments, update labels
-  # issues: write         # e.g., create/update issues
-
+  contents: read
 
 jobs:
-  lint_typecheck_build:
+  validate:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
-      - name: Setup PNPM
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
@@ -32,14 +29,8 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
+      - name: Lint, typecheck, and build
+        run: pnpm check
 
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Build
-        run: pnpm build
-
-      - name: Verify Build Artifact
-        run: test -f dist/src/index.js
+      - name: Verify starter bot build artifact
+        run: test -f bots/neko-starter-bot/dist/src/index.js
