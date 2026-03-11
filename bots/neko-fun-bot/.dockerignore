@@ -1,7 +1,0 @@
-.git
-.github
-node_modules
-.pnpm-store
-.env
-*.log
-**/dist

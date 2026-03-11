@@ -32,6 +32,6 @@ jobs:
       - name: Lint, typecheck, and build
         run: pnpm check
 
-      - name: Verify bot build artifacts
+      - name: Verify starter bot build artifact
         run: |
-          node -e "const fs=require('node:fs'); const files=['bots/neko-starter-bot/dist/src/index.js','bots/neko-fun-bot/dist/src/index.js']; const missing=files.filter((f)=>!fs.existsSync(f)); if(missing.length){console.error('Missing build artifacts:', missing.join(', ')); process.exit(1);} console.log('Verified artifacts:', files.join(', '));"
+          node -e "const fs=require('node:fs'); const file='bots/neko-starter-bot/dist/src/index.js'; if(!fs.existsSync(file)){console.error('Missing build artifact:', file); process.exit(1);} console.log('Verified artifact:', file);"

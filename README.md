@@ -5,15 +5,13 @@ A monorepo for all Discord bots, built with pnpm workspaces.
 ## Bots in this repo
 
 - `neko-starter-bot`
-- `neko-fun-bot`
 
 ## Repository Layout
 
 ```text
 .
 |-- bots/
-|   |-- neko-starter-bot/
-|   `-- neko-fun-bot/
+|   `-- neko-starter-bot/
 |-- scripts/
 |   `-- new-bot.mjs
 |-- .github/workflows/
