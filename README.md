@@ -2,17 +2,20 @@
 
 A monorepo for all Discord bots, built with pnpm workspaces.
 
+## Bots in this repo
+
+- `neko-starter-bot`
+- `neko-fun-bot`
+
 ## Repository Layout
 
 ```text
 .
 |-- bots/
-|   `-- neko-starter-bot/
-|       |-- src/
-|       |-- package.json
-|       |-- README.md
-|       |-- register.ts
-|       `-- tsconfig.json
+|   |-- neko-starter-bot/
+|   `-- neko-fun-bot/
+|-- scripts/
+|   `-- new-bot.mjs
 |-- .github/workflows/
 |-- package.json
 |-- pnpm-workspace.yaml
@@ -28,38 +31,40 @@ A monorepo for all Discord bots, built with pnpm workspaces.
 
 ```bash
 pnpm install
-pnpm lint
-pnpm typecheck
-pnpm build
+pnpm check
 ```
 
-Run the starter bot in dev mode:
+Run starter bot in dev mode:
 
 ```bash
 pnpm --filter ./bots/neko-starter-bot dev
 ```
 
-## Add a New Bot
-
-1. Copy `bots/neko-starter-bot` to a new folder under `bots/`.
-2. Rename the package in the new bot's `package.json`.
-3. Update command/runtime code and README for the new bot.
-4. Run checks:
+## Add a New Bot (1 command)
 
 ```bash
-pnpm --filter ./bots/<your-bot> lint
-pnpm --filter ./bots/<your-bot> typecheck
-pnpm --filter ./bots/<your-bot> build
+pnpm new:bot neko-your-bot
+```
+
+That scaffolds a full bot at `bots/neko-your-bot` using the starter structure.
+
+After scaffold:
+
+```bash
+pnpm --filter ./bots/neko-your-bot lint
+pnpm --filter ./bots/neko-your-bot typecheck
+pnpm --filter ./bots/neko-your-bot build
+pnpm --filter ./bots/neko-your-bot dev
 ```
 
 ## Releases
 
-Use the GitHub Actions workflow `Release Bot`:
+Use GitHub Actions workflow `Release Bot`:
 
 1. Open Actions -> `Release Bot` -> `Run workflow`
 2. Set `bot` (folder name under `bots/`)
 3. Set `version` (example: `v1.0.0`)
-4. Optional: set `publish_release=true` to publish a GitHub Release
+4. Optional: set `publish_release=true` to publish a GitHub release
 
 The workflow creates a zip artifact for the selected bot and can publish it as a release asset.
 

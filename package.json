@@ -12,7 +12,8 @@
     "lint": "pnpm -r --filter ./bots/* lint",
     "typecheck": "pnpm -r --filter ./bots/* typecheck",
     "check": "pnpm run lint && pnpm run typecheck && pnpm run build",
-    "format": "pnpm -r --filter ./bots/* format"
+    "format": "pnpm -r --filter ./bots/* format",
+    "new:bot": "node scripts/new-bot.mjs"
   },
   "pnpm": {
     "overrides": {

@@ -1,0 +1,46 @@
+# Neko Fun Bot
+
+A TypeScript starter Discord bot using discord.js v14.
+
+## Requirements
+
+- Node.js 20+
+- pnpm
+
+## Environment Variables
+
+Copy `.env.example` to `.env` and set:
+
+```env
+DISCORD_TOKEN=your-bot-token
+DISCORD_CLIENT_ID=your-application-id
+DISCORD_GUILD_ID=your-guild-id
+NODE_ENV=development
+LOG_PRETTY=true
+LOG_LEVEL=info
+```
+
+## Commands
+
+```bash
+pnpm install
+pnpm dev
+pnpm register:guild
+pnpm register:global
+pnpm build
+pnpm start
+```
+
+## Docker
+
+Build from repository root:
+
+```bash
+docker build -f bots/neko-fun-bot/Dockerfile -t neko-fun-bot:latest .
+```
+
+Run:
+
+```bash
+docker run --rm -it --env-file bots/neko-fun-bot/.env neko-fun-bot:latest
+```
