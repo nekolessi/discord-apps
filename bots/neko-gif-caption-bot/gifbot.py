@@ -1,8 +1,10 @@
 import asyncio
+import ipaddress
 import os
+import socket
 import uuid
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import discord
 import imageio
@@ -40,6 +42,8 @@ MAX_INPUT_BYTES = 20 * 1024 * 1024
 MAX_FRAMES = 300
 MAX_PIXELS_PER_FRAME = 1920 * 1080 * 2
 ALLOWED_EXTENSIONS = {".gif", ".png", ".apng"}
+ALLOWED_URL_SCHEMES = {"http", "https"}
+MAX_REDIRECTS = 4
 MAX_DISCORD_UPLOAD_BYTES = 25 * 1024 * 1024
 MAX_CONCURRENT_JOBS = max(1, int(os.getenv("MAX_CONCURRENT_JOBS", "2")))
 JOB_TIMEOUT_SECONDS = max(15, int(os.getenv("JOB_TIMEOUT_SECONDS", "120")))
@@ -96,31 +100,97 @@ def _ext_from_filename(filename: str | None) -> str:
     return _normalize_ext(Path(filename or "").suffix)
 
 
-def download_file(url: str, path: Path, max_bytes: int = MAX_INPUT_BYTES) -> None:
-    parsed = urlparse(url)
-    if parsed.scheme not in {"http", "https"}:
+def _is_public_ip(ip_text: str) -> bool:
+    address = ipaddress.ip_address(ip_text)
+    return not (
+        address.is_private
+        or address.is_loopback
+        or address.is_link_local
+        or address.is_multicast
+        or address.is_reserved
+        or address.is_unspecified
+    )
+
+
+def _assert_public_hostname(hostname: str) -> None:
+    try:
+        records = socket.getaddrinfo(hostname, None, type=socket.SOCK_STREAM)
+    except socket.gaierror as exc:
+        raise ValueError("URL host could not be resolved.") from exc
+
+    for record in records:
+        ip_text = record[4][0]
+        try:
+            if _is_public_ip(ip_text):
+                return
+        except ValueError:
+            continue
+
+    raise ValueError("URL host resolves to a non-public IP address.")
+
+
+def _validate_remote_url(raw_url: str) -> str:
+    parsed = urlparse(raw_url)
+    if parsed.scheme not in ALLOWED_URL_SCHEMES:
         raise ValueError("Only http/https URLs are supported.")
 
-    with requests.get(url, stream=True, timeout=DOWNLOAD_TIMEOUT) as response:
-        response.raise_for_status()
+    if parsed.username or parsed.password:
+        raise ValueError("URLs with embedded credentials are not supported.")
 
-        content_type = (response.headers.get("Content-Type") or "").lower()
-        if content_type and not content_type.startswith("image/"):
-            raise ValueError("URL did not return an image.")
+    if not parsed.hostname:
+        raise ValueError("URL must include a hostname.")
 
-        content_length = response.headers.get("Content-Length")
-        if content_length and int(content_length) > max_bytes:
-            raise ValueError("Input file is too large (max 20MB).")
+    _assert_public_hostname(parsed.hostname.rstrip("."))
+    return parsed.geturl()
 
-        total = 0
-        with open(path, "wb") as file:
-            for chunk in response.iter_content(chunk_size=64 * 1024):
-                if not chunk:
+
+def download_file(url: str, path: Path, max_bytes: int = MAX_INPUT_BYTES) -> None:
+    next_url = _validate_remote_url(url)
+
+    with requests.Session() as session:
+        session.trust_env = False
+
+        for redirect_count in range(MAX_REDIRECTS + 1):
+            with session.get(
+                next_url,
+                stream=True,
+                timeout=DOWNLOAD_TIMEOUT,
+                allow_redirects=False,
+            ) as response:
+                status_code = response.status_code
+                if 300 <= status_code < 400:
+                    location = response.headers.get("Location")
+                    if not location:
+                        raise ValueError("Redirect response did not include a location.")
+
+                    if redirect_count >= MAX_REDIRECTS:
+                        raise ValueError("Too many redirects while fetching URL.")
+
+                    next_url = _validate_remote_url(urljoin(next_url, location))
                     continue
-                total += len(chunk)
-                if total > max_bytes:
+
+                response.raise_for_status()
+
+                content_type = (response.headers.get("Content-Type") or "").lower()
+                if content_type and not content_type.startswith("image/"):
+                    raise ValueError("URL did not return an image.")
+
+                content_length = response.headers.get("Content-Length")
+                if content_length and int(content_length) > max_bytes:
                     raise ValueError("Input file is too large (max 20MB).")
-                file.write(chunk)
+
+                total = 0
+                with open(path, "wb") as file:
+                    for chunk in response.iter_content(chunk_size=64 * 1024):
+                        if not chunk:
+                            continue
+                        total += len(chunk)
+                        if total > max_bytes:
+                            raise ValueError("Input file is too large (max 20MB).")
+                        file.write(chunk)
+                return
+
+    raise ValueError("Too many redirects while fetching URL.")
 
 
 def has_transparency(img: Image.Image) -> bool:

@@ -7,7 +7,11 @@ on:
         description: "Bot folder under bots/"
         required: true
         default: "neko-starter-bot"
-        type: string
+        type: choice
+        options:
+          - neko-starter-bot
+          - neko-gif-caption-bot
+          - neko-8ball-bot
       version:
         description: "Version label (example: v1.0.0)"
         required: true
@@ -37,11 +41,6 @@ jobs:
           VERSION: ${{ github.event.inputs.version }}
         run: |
           set -euo pipefail
-
-          if ! [[ "$BOT" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
-            echo "::error title=Invalid bot::Use lowercase kebab-case bot folder names (example: neko-starter-bot)"
-            exit 1
-          fi
 
           if ! [[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.]+)?$ ]]; then
             echo "::error title=Invalid version::Use semver label like v1.0.0"
