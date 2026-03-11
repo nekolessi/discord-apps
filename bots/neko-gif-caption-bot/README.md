@@ -37,10 +37,23 @@ Optional:
 - `MAX_CONCURRENT_JOBS=2`
 - `JOB_TIMEOUT_SECONDS=120`
 
-## Docker
+## Docker (monorepo-safe)
+From repository root:
+
 ```bash
-docker build -f bots/neko-gif-caption-bot/Dockerfile -t neko-gif-caption-bot:latest .
+docker build -f bots/neko-gif-caption-bot/Dockerfile \
+  -t neko-gif-caption-bot:latest \
+  bots/neko-gif-caption-bot
+
 docker run --rm -it --env-file bots/neko-gif-caption-bot/.env neko-gif-caption-bot:latest
+```
+
+From bot directory:
+
+```bash
+cd bots/neko-gif-caption-bot
+docker build -t neko-gif-caption-bot:latest .
+docker run --rm -it --env-file .env neko-gif-caption-bot:latest
 ```
 
 ## License
