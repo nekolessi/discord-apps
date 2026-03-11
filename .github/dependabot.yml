@@ -20,6 +20,16 @@ updates:
       prefix: "deps"
       include: "scope"
 
+  - package-ecosystem: "pip"
+    directory: "/bots/neko-8ball-bot"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "04:06"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

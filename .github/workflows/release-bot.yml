@@ -81,9 +81,7 @@ jobs:
         run: |
           set -euo pipefail
           pip install -r "bots/${BOT}/requirements.txt"
-          if [ -f "bots/${BOT}/gifbot.py" ]; then
-            python -m py_compile "bots/${BOT}/gifbot.py"
-          fi
+          python -m compileall -q "bots/${BOT}"
 
       - name: Create release zip
         id: package

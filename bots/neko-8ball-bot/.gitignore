@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# local env
+.venv/
+venv/
+
+# secrets
+.env
+.env.*.local
+
+# runtime config
+guild_config.json

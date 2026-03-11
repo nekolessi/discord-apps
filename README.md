@@ -16,6 +16,7 @@ Monorepo for self-hosted Discord bots with shared release automation and CI.
 | --- | --- | --- |
 | `neko-starter-bot` | TypeScript + discord.js | Starter slash-command bot template |
 | `neko-gif-caption-bot` | Python + discord.py | Captions GIF/APNG files from Discord |
+| `neko-8ball-bot` | Python + discord.py | Persona-based 8-ball bot with GIF reactions |
 
 ## Repo Layout
 
@@ -23,7 +24,8 @@ Monorepo for self-hosted Discord bots with shared release automation and CI.
 .
 |-- bots/
 |   |-- neko-starter-bot/
-|   `-- neko-gif-caption-bot/
+|   |-- neko-gif-caption-bot/
+|   `-- neko-8ball-bot/
 |-- scripts/
 |   `-- new-bot.mjs
 |-- .github/workflows/
@@ -55,6 +57,16 @@ python -m venv .venv
 . .venv/Scripts/Activate.ps1
 pip install -r requirements.txt
 python gifbot.py
+```
+
+### Run 8-ball bot
+
+```powershell
+cd bots/neko-8ball-bot
+python -m venv .venv
+. .venv/Scripts/Activate.ps1
+pip install -r requirements.txt
+python neko_8ball_bot.py
 ```
 
 ## Scaffold a New Node Bot
