@@ -15,12 +15,12 @@ COPY bots/neko-starter-bot bots/neko-starter-bot
 RUN pnpm --filter ./bots/neko-starter-bot build
 
 FROM node:20-alpine AS runner
-WORKDIR /app
+WORKDIR /repo/bots/neko-starter-bot
 ENV NODE_ENV=production
 RUN addgroup -S app && adduser -S bot -G app
 
 COPY --from=deps /repo/node_modules /repo/node_modules
-COPY --from=deps /repo/bots/neko-starter-bot/node_modules ./node_modules
+COPY --from=deps /repo/bots/neko-starter-bot/node_modules /repo/bots/neko-starter-bot/node_modules
 COPY --from=build /repo/bots/neko-starter-bot/dist ./dist
 COPY --from=build /repo/bots/neko-starter-bot/package.json ./package.json
 

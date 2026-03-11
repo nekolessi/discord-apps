@@ -38,20 +38,34 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Register commands
+      - name: Validate workflow input
+        id: validate
         env:
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN || vars.DISCORD_TOKEN }}
-          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID || vars.DISCORD_CLIENT_ID }}
-          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID || vars.DISCORD_GUILD_ID }}
           BOT: ${{ github.event.inputs.bot }}
-          SCOPE: ${{ github.event.inputs.scope }}
         run: |
           set -euo pipefail
+
+          if ! [[ "$BOT" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+            echo "::error title=Invalid bot::Use lowercase kebab-case bot folder names (example: neko-starter-bot)"
+            exit 1
+          fi
 
           if [ ! -f "bots/${BOT}/package.json" ]; then
             echo "::error title=Invalid bot::bots/${BOT}/package.json not found"
             exit 1
           fi
+
+          echo "bot=$BOT" >> "$GITHUB_OUTPUT"
+
+      - name: Register commands
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN || vars.DISCORD_TOKEN }}
+          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID || vars.DISCORD_CLIENT_ID }}
+          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID || vars.DISCORD_GUILD_ID }}
+          BOT: ${{ steps.validate.outputs.bot }}
+          SCOPE: ${{ github.event.inputs.scope }}
+        run: |
+          set -euo pipefail
 
           missing=0
           for k in DISCORD_TOKEN DISCORD_CLIENT_ID; do
