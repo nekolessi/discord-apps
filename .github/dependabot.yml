@@ -10,6 +10,16 @@ updates:
       prefix: "deps"
       include: "scope"
 
+  - package-ecosystem: "pip"
+    directory: "/bots/neko-gif-caption-bot"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "04:05"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

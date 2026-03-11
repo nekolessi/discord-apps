@@ -1,0 +1,7 @@
+services:
+  gif-caption-bot:
+    build: .
+    container_name: neko-gif-caption-bot
+    restart: unless-stopped
+    env_file:
+      - .env

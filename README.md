@@ -4,14 +4,16 @@ A monorepo for all Discord bots, built with pnpm workspaces.
 
 ## Bots in this repo
 
-- `neko-starter-bot`
+- `neko-starter-bot` (TypeScript / discord.js)
+- `neko-gif-caption-bot` (Python / discord.py)
 
 ## Repository Layout
 
 ```text
 .
 |-- bots/
-|   `-- neko-starter-bot/
+|   |-- neko-starter-bot/
+|   `-- neko-gif-caption-bot/
 |-- scripts/
 |   `-- new-bot.mjs
 |-- .github/workflows/
@@ -22,8 +24,8 @@ A monorepo for all Discord bots, built with pnpm workspaces.
 
 ## Requirements
 
-- Node.js 20+
-- pnpm (managed through `packageManager`)
+- Node.js 20+ and pnpm (for Node bots)
+- Python 3.11+ (for Python bots)
 
 ## Quick Start
 
@@ -38,22 +40,23 @@ Run starter bot in dev mode:
 pnpm --filter ./bots/neko-starter-bot dev
 ```
 
-## Add a New Bot (1 command)
+Run gif caption bot:
+
+```bash
+cd bots/neko-gif-caption-bot
+python -m venv .venv
+. .venv/Scripts/Activate.ps1
+pip install -r requirements.txt
+python gifbot.py
+```
+
+## Add a New Node Bot (1 command)
 
 ```bash
 pnpm new:bot neko-your-bot
 ```
 
-That scaffolds a full bot at `bots/neko-your-bot` using the starter structure.
-
-After scaffold:
-
-```bash
-pnpm --filter ./bots/neko-your-bot lint
-pnpm --filter ./bots/neko-your-bot typecheck
-pnpm --filter ./bots/neko-your-bot build
-pnpm --filter ./bots/neko-your-bot dev
-```
+That scaffolds a full Node bot at `bots/neko-your-bot` using the starter structure.
 
 ## Releases
 
@@ -64,7 +67,7 @@ Use GitHub Actions workflow `Release Bot`:
 3. Set `version` (example: `v1.0.0`)
 4. Optional: set `publish_release=true` to publish a GitHub release
 
-The workflow creates a zip artifact for the selected bot and can publish it as a release asset.
+`Release Bot` supports both Node and Python bot folders.
 
 ## License
 

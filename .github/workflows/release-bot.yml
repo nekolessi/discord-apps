@@ -30,28 +30,60 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Detect bot type
+        id: detect
+        env:
+          BOT: ${{ github.event.inputs.bot }}
+        run: |
+          set -euo pipefail
+          if [ -f "bots/${BOT}/package.json" ]; then
+            echo "type=node" >> "$GITHUB_OUTPUT"
+          elif [ -f "bots/${BOT}/requirements.txt" ]; then
+            echo "type=python" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error title=Invalid bot::No package.json or requirements.txt in bots/${BOT}"
+            exit 1
+          fi
+
       - name: Setup pnpm
+        if: ${{ steps.detect.outputs.type == 'node' }}
         uses: pnpm/action-setup@v4
 
       - name: Setup Node
+        if: ${{ steps.detect.outputs.type == 'node' }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
 
-      - name: Install
+      - name: Install Node dependencies
+        if: ${{ steps.detect.outputs.type == 'node' }}
         run: pnpm install --frozen-lockfile
 
-      - name: Build selected bot
+      - name: Build selected Node bot
+        if: ${{ steps.detect.outputs.type == 'node' }}
+        env:
+          BOT: ${{ github.event.inputs.bot }}
+        run: pnpm --filter "./bots/${BOT}" build
+
+      - name: Setup Python
+        if: ${{ steps.detect.outputs.type == 'python' }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: bots/${{ github.event.inputs.bot }}/requirements.txt
+
+      - name: Validate selected Python bot
+        if: ${{ steps.detect.outputs.type == 'python' }}
         env:
           BOT: ${{ github.event.inputs.bot }}
         run: |
           set -euo pipefail
-          if [ ! -f "bots/${BOT}/package.json" ]; then
-            echo "::error title=Invalid bot::bots/${BOT}/package.json not found"
-            exit 1
+          pip install -r "bots/${BOT}/requirements.txt"
+          if [ -f "bots/${BOT}/gifbot.py" ]; then
+            python -m py_compile "bots/${BOT}/gifbot.py"
           fi
-          pnpm --filter "./bots/${BOT}" build
 
       - name: Create release zip
         id: package
@@ -63,11 +95,9 @@ jobs:
           mkdir -p dist
           ARTIFACT="${BOT}-${VERSION}.zip"
           zip -r "dist/${ARTIFACT}" \
-            "bots/${BOT}/dist" \
-            "bots/${BOT}/README.md" \
-            "bots/${BOT}/.env.example" \
-            "bots/${BOT}/package.json" \
-            "LICENSE"
+            "bots/${BOT}" \
+            "LICENSE" \
+            -x "*/.venv/*" "*/__pycache__/*" "*/.cache/*" "*/node_modules/*"
           echo "artifact=${ARTIFACT}" >> "$GITHUB_OUTPUT"
 
       - name: Upload artifact
