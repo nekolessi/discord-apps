@@ -43,6 +43,8 @@ pnpm install
 pnpm check
 ```
 
+`CI` runs the same Node checks and also validates Python bots by installing their requirements and compiling them.
+
 ### Run starter bot
 
 ```bash
@@ -89,8 +91,8 @@ pnpm --filter ./bots/neko-your-bot dev
 Use GitHub Actions workflow `Release Bot`:
 
 1. Open Actions -> `Release Bot` -> `Run workflow`.
-2. Set `bot` to the folder name under `bots/`.
-3. Set `version` (example: `v1.0.0`).
+2. Set `bot` to the folder name under `bots/` (lowercase kebab-case, example: `neko-starter-bot`).
+3. Set `version` using semver format (example: `v1.0.0`).
 4. Set `publish_release=true` to publish a GitHub release.
 
 `Release Bot` supports both Node and Python bot folders.
