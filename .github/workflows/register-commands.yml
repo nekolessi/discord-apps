@@ -42,44 +42,13 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Resolve workflow inputs
-        id: inputs
-        env:
-          BOT_INPUT: ${{ github.event.inputs.bot }}
-          SCOPE_INPUT: ${{ github.event.inputs.scope }}
-        run: |
-          set -euo pipefail
-
-          case "$BOT_INPUT" in
-            neko-starter-bot|neko-gif-caption-bot|neko-8ball-bot)
-              BOT="$BOT_INPUT"
-              ;;
-            *)
-              echo "::error title=Invalid bot::Unsupported bot selection."
-              exit 1
-              ;;
-          esac
-
-          case "$SCOPE_INPUT" in
-            guild|global)
-              SCOPE="$SCOPE_INPUT"
-              ;;
-            *)
-              echo "::error title=Invalid scope::Use guild or global."
-              exit 1
-              ;;
-          esac
-
-          echo "bot=$BOT" >> "$GITHUB_OUTPUT"
-          echo "scope=$SCOPE" >> "$GITHUB_OUTPUT"
-
       - name: Register commands
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN || vars.DISCORD_TOKEN }}
           DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID || vars.DISCORD_CLIENT_ID }}
           DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID || vars.DISCORD_GUILD_ID }}
-          BOT: ${{ steps.inputs.outputs.bot }}
-          SCOPE: ${{ steps.inputs.outputs.scope }}
+          BOT: ${{ github.event.inputs.bot }}
+          SCOPE: ${{ github.event.inputs.scope }}
         run: |
           set -euo pipefail
 

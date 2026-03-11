@@ -44,23 +44,6 @@ MAX_PIXELS_PER_FRAME = 1920 * 1080 * 2
 ALLOWED_EXTENSIONS = {".gif", ".png", ".apng"}
 ALLOWED_URL_SCHEMES = {"http", "https"}
 MAX_REDIRECTS = 4
-TRUSTED_IMAGE_HOSTS = {
-    "cdn.discordapp.com",
-    "media.discordapp.net",
-    "giphy.com",
-    "media.giphy.com",
-    "imgur.com",
-    "i.imgur.com",
-    "tenor.com",
-    "media.tenor.com",
-}
-TRUSTED_IMAGE_ROOT_DOMAINS = (
-    "discordapp.com",
-    "discordapp.net",
-    "giphy.com",
-    "imgur.com",
-    "tenor.com",
-)
 MAX_DISCORD_UPLOAD_BYTES = 25 * 1024 * 1024
 MAX_CONCURRENT_JOBS = max(1, int(os.getenv("MAX_CONCURRENT_JOBS", "2")))
 JOB_TIMEOUT_SECONDS = max(15, int(os.getenv("JOB_TIMEOUT_SECONDS", "120")))
@@ -146,19 +129,6 @@ def _assert_public_hostname(hostname: str) -> None:
     raise ValueError("URL host resolves to a non-public IP address.")
 
 
-def _is_subdomain_of(hostname: str, root_domain: str) -> bool:
-    host_labels = hostname.lower().strip(".").split(".")
-    root_labels = root_domain.lower().strip(".").split(".")
-    return len(host_labels) >= len(root_labels) and host_labels[-len(root_labels):] == root_labels
-
-
-def _is_trusted_image_hostname(hostname: str) -> bool:
-    normalized = hostname.lower().strip(".")
-    if normalized in TRUSTED_IMAGE_HOSTS:
-        return True
-    return any(_is_subdomain_of(normalized, root_domain) for root_domain in TRUSTED_IMAGE_ROOT_DOMAINS)
-
-
 def _validate_remote_url(raw_url: str) -> str:
     parsed = urlparse(raw_url)
     if parsed.scheme not in ALLOWED_URL_SCHEMES:
@@ -170,11 +140,7 @@ def _validate_remote_url(raw_url: str) -> str:
     if not parsed.hostname:
         raise ValueError("URL must include a hostname.")
 
-    hostname = parsed.hostname.rstrip(".")
-    if not _is_trusted_image_hostname(hostname):
-        raise ValueError("URL host is not in the trusted image host allowlist.")
-
-    _assert_public_hostname(hostname)
+    _assert_public_hostname(parsed.hostname.rstrip("."))
     return parsed.geturl()
 
 
