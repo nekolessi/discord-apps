@@ -34,10 +34,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate workflow inputs
-        id: validate
+      - name: Resolve bot input
+        id: bot
         env:
-          BOT: ${{ github.event.inputs.bot }}
+          BOT_INPUT: ${{ github.event.inputs.bot }}
+        run: |
+          set -euo pipefail
+
+          case "$BOT_INPUT" in
+            neko-starter-bot|neko-gif-caption-bot|neko-8ball-bot)
+              echo "bot=$BOT_INPUT" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "::error title=Invalid bot::Unsupported bot selection."
+              exit 1
+              ;;
+          esac
+
+      - name: Validate version input
+        id: version
+        env:
           VERSION: ${{ github.event.inputs.version }}
         run: |
           set -euo pipefail
@@ -47,13 +63,12 @@ jobs:
             exit 1
           fi
 
-          echo "bot=$BOT" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Detect bot type
         id: detect
         env:
-          BOT: ${{ steps.validate.outputs.bot }}
+          BOT: ${{ steps.bot.outputs.bot }}
         run: |
           set -euo pipefail
           if [ -f "bots/${BOT}/package.json" ]; then
@@ -83,7 +98,7 @@ jobs:
       - name: Build selected Node bot
         if: ${{ steps.detect.outputs.type == 'node' }}
         env:
-          BOT: ${{ steps.validate.outputs.bot }}
+          BOT: ${{ steps.bot.outputs.bot }}
         run: pnpm --filter "./bots/${BOT}" build
 
       - name: Setup Python
@@ -92,12 +107,12 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'pip'
-          cache-dependency-path: bots/${{ steps.validate.outputs.bot }}/requirements.txt
+          cache-dependency-path: bots/${{ steps.bot.outputs.bot }}/requirements.txt
 
       - name: Validate selected Python bot
         if: ${{ steps.detect.outputs.type == 'python' }}
         env:
-          BOT: ${{ steps.validate.outputs.bot }}
+          BOT: ${{ steps.bot.outputs.bot }}
         run: |
           set -euo pipefail
           pip install -r "bots/${BOT}/requirements.txt"
@@ -106,8 +121,8 @@ jobs:
       - name: Create release zip
         id: package
         env:
-          BOT: ${{ steps.validate.outputs.bot }}
-          VERSION: ${{ steps.validate.outputs.version }}
+          BOT: ${{ steps.bot.outputs.bot }}
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           set -euo pipefail
           mkdir -p dist
@@ -128,6 +143,6 @@ jobs:
         if: ${{ github.event.inputs.publish_release == 'true' }}
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.validate.outputs.bot }}-${{ steps.validate.outputs.version }}
-          name: ${{ steps.validate.outputs.bot }} ${{ steps.validate.outputs.version }}
+          tag_name: ${{ steps.bot.outputs.bot }}-${{ steps.version.outputs.version }}
+          name: ${{ steps.bot.outputs.bot }} ${{ steps.version.outputs.version }}
           files: dist/${{ steps.package.outputs.artifact }}
