@@ -7,12 +7,12 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev": "pnpm --filter ./bots/neko-starter-bot dev",
-    "build": "pnpm -r --filter ./bots/* build",
-    "lint": "pnpm -r --filter ./bots/* lint",
-    "typecheck": "pnpm -r --filter ./bots/* typecheck",
+    "dev": "pnpm --filter \"./bots/neko-starter-bot\" dev",
+    "build": "pnpm -r --filter \"./bots/*\" build",
+    "lint": "pnpm -r --filter \"./bots/*\" lint",
+    "typecheck": "pnpm -r --filter \"./bots/*\" typecheck",
     "check": "pnpm run lint && pnpm run typecheck && pnpm run build",
-    "format": "pnpm -r --filter ./bots/* format",
+    "format": "pnpm -r --filter \"./bots/*\" format",
     "new:bot": "node scripts/new-bot.mjs"
   },
   "pnpm": {
