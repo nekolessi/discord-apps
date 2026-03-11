@@ -17,6 +17,7 @@ yarn-error.log*
 
 # local tooling caches
 .cache
+ci-job-logs/
 
 # editor
 .vscode/
