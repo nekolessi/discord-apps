@@ -28,7 +28,7 @@ import asyncio
 import json
 from pathlib import Path
 from typing import Optional, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 from dotenv import load_dotenv
 import aiohttp
@@ -245,31 +245,112 @@ def pick_persona() -> tuple[str, str]:
 # =========================
 
 TENOR_HEADERS = {"User-Agent": "DiscordBot (https://github.com, 1.0)", "Referer": "https://discord.com"}
+DISCORD_CDN_HOSTS = {"cdn.discordapp.com", "media.discordapp.net"}
+ALLOWED_REMOTE_GIF_HOSTS = {
+    "cdn.discordapp.com",
+    "media.discordapp.net",
+    "media.tenor.com",
+    "tenor.com",
+    "www.tenor.com",
+}
+ALLOWED_URL_SCHEMES = {"http", "https"}
+MAX_REMOTE_GIF_BYTES = 15 * 1024 * 1024
+MAX_REDIRECTS = 4
 
 def _looks_like_gif(data: bytes) -> bool:
     return len(data) >= 6 and (data[:6] == b"GIF87a" or data[:6] == b"GIF89a")
 
-def _is_discord_cdn(url: str) -> bool:
+def _is_subdomain_of(hostname: str, root_domain: str) -> bool:
+    host_labels = hostname.lower().strip(".").split(".")
+    root_labels = root_domain.lower().strip(".").split(".")
+    return len(host_labels) >= len(root_labels) and host_labels[-len(root_labels):] == root_labels
+
+
+def _normalize_http_url(raw_url: str) -> Optional[tuple[str, str]]:
     try:
-        netloc = urlparse(url).netloc.lower()
+        parsed = urlparse(raw_url)
     except Exception:
+        return None
+
+    if parsed.scheme not in ALLOWED_URL_SCHEMES or not parsed.hostname:
+        return None
+
+    if parsed.username or parsed.password:
+        return None
+
+    hostname = parsed.hostname.lower().strip(".")
+    return parsed.geturl(), hostname
+
+
+def _is_discord_cdn(url: str) -> bool:
+    normalized = _normalize_http_url(url)
+    if not normalized:
         return False
-    return ("cdn.discordapp.com" in netloc) or ("media.discordapp.net" in netloc)
+
+    _, hostname = normalized
+    return hostname in DISCORD_CDN_HOSTS
 
 async def _http_fetch_gif(url: str) -> Optional[discord.File]:
-    parsed = urlparse(url)
-    domain = parsed.netloc.lower()
-    headers = TENOR_HEADERS if ("tenor.co" in domain or "tenor.com" in domain) else None
+    normalized = _normalize_http_url(url)
+    if not normalized:
+        return None
+
+    current_url, hostname = normalized
+    if hostname not in ALLOWED_REMOTE_GIF_HOSTS and not _is_subdomain_of(hostname, "tenor.com"):
+        print(f"[GIF FETCH BLOCKED] host={hostname}")
+        return None
+
+    headers = TENOR_HEADERS if _is_subdomain_of(hostname, "tenor.com") else None
+
     try:
         async with aiohttp.ClientSession(headers=headers) as session:
-            async with session.get(url, timeout=25, allow_redirects=True) as resp:
-                if resp.status != 200:
-                    print(f"[GIF FETCH FAIL] status={resp.status} url={url}")
-                    return None
-                data = await resp.read()
-                if not _looks_like_gif(data):
-                    print(f"[GIF NOT GIF BYTES] url={url} content-type={resp.headers.get('Content-Type')} len={len(data)}")
-                    return None
+            for _ in range(MAX_REDIRECTS + 1):
+                async with session.get(current_url, timeout=25, allow_redirects=False) as resp:
+                    if 300 <= resp.status < 400:
+                        location = resp.headers.get("Location")
+                        if not location:
+                            print(f"[GIF FETCH FAIL] redirect without location url={current_url}")
+                            return None
+
+                        candidate = _normalize_http_url(urljoin(current_url, location))
+                        if not candidate:
+                            print(f"[GIF FETCH BLOCKED] bad redirect location={location}")
+                            return None
+
+                        redirected_url, redirected_host = candidate
+                        if redirected_host not in ALLOWED_REMOTE_GIF_HOSTS and not _is_subdomain_of(
+                            redirected_host,
+                            "tenor.com",
+                        ):
+                            print(f"[GIF FETCH BLOCKED] redirect host={redirected_host}")
+                            return None
+
+                        current_url = redirected_url
+                        continue
+
+                    if resp.status != 200:
+                        print(f"[GIF FETCH FAIL] status={resp.status} url={current_url}")
+                        return None
+
+                    if resp.content_length and resp.content_length > MAX_REMOTE_GIF_BYTES:
+                        print(f"[GIF FETCH FAIL] content too large url={current_url} bytes={resp.content_length}")
+                        return None
+
+                    data = await resp.read()
+                    if len(data) > MAX_REMOTE_GIF_BYTES:
+                        print(f"[GIF FETCH FAIL] body too large url={current_url} bytes={len(data)}")
+                        return None
+
+                    if not _looks_like_gif(data):
+                        print(
+                            f"[GIF NOT GIF BYTES] url={current_url} content-type={resp.headers.get('Content-Type')} "
+                            f"len={len(data)}"
+                        )
+                        return None
+                    break
+            else:
+                print(f"[GIF FETCH FAIL] too many redirects url={url}")
+                return None
     except Exception as e:
         print(f"[GIF FETCH EXCEPTION] {e} url={url}")
         return None
@@ -296,7 +377,7 @@ def _local_file_to_discord_file(path: str) -> Optional[discord.File]:
     return discord.File(bio, filename=name)
 
 async def fetch_gif_as_file(url_or_path: str) -> Optional[discord.File]:
-    if url_or_path.startswith("http://") or url_or_path.startswith("https://"):
+    if _normalize_http_url(url_or_path):
         return await _http_fetch_gif(url_or_path)
     return _local_file_to_discord_file(url_or_path)
 

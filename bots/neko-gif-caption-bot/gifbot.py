@@ -54,12 +54,12 @@ TRUSTED_IMAGE_HOSTS = {
     "tenor.com",
     "media.tenor.com",
 }
-TRUSTED_IMAGE_HOST_SUFFIXES = (
-    ".discordapp.com",
-    ".discordapp.net",
-    ".giphy.com",
-    ".imgur.com",
-    ".tenor.com",
+TRUSTED_IMAGE_ROOT_DOMAINS = (
+    "discordapp.com",
+    "discordapp.net",
+    "giphy.com",
+    "imgur.com",
+    "tenor.com",
 )
 MAX_DISCORD_UPLOAD_BYTES = 25 * 1024 * 1024
 MAX_CONCURRENT_JOBS = max(1, int(os.getenv("MAX_CONCURRENT_JOBS", "2")))
@@ -146,11 +146,17 @@ def _assert_public_hostname(hostname: str) -> None:
     raise ValueError("URL host resolves to a non-public IP address.")
 
 
+def _is_subdomain_of(hostname: str, root_domain: str) -> bool:
+    host_labels = hostname.lower().strip(".").split(".")
+    root_labels = root_domain.lower().strip(".").split(".")
+    return len(host_labels) >= len(root_labels) and host_labels[-len(root_labels):] == root_labels
+
+
 def _is_trusted_image_hostname(hostname: str) -> bool:
     normalized = hostname.lower().strip(".")
     if normalized in TRUSTED_IMAGE_HOSTS:
         return True
-    return any(normalized.endswith(suffix) for suffix in TRUSTED_IMAGE_HOST_SUFFIXES)
+    return any(_is_subdomain_of(normalized, root_domain) for root_domain in TRUSTED_IMAGE_ROOT_DOMAINS)
 
 
 def _validate_remote_url(raw_url: str) -> str:
