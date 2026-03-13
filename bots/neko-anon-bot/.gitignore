@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# local env
+.venv/
+venv/
+.env
+.env.*.local
+
+# runtime data
+data/
+
+# leftover node artifacts (ignore if present)
+node_modules/
+dist/
+src/

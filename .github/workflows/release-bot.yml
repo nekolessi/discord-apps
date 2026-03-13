@@ -12,6 +12,7 @@ on:
           - neko-starter-bot
           - neko-gif-caption-bot
           - neko-8ball-bot
+          - neko-anon-bot
       version:
         description: "Version label (example: v1.0.0)"
         required: true
