@@ -26,7 +26,8 @@ Monorepo for self-hosted Discord bots with shared release automation and CI.
 |-- bots/
 |   |-- neko-starter-bot/
 |   |-- neko-gif-caption-bot/
-|   `-- neko-8ball-bot/
+|   |-- neko-8ball-bot/
+|   `-- neko-anon-bot/
 |-- scripts/
 |   `-- new-bot.mjs
 |-- .github/workflows/
@@ -76,6 +77,7 @@ python neko_8ball_bot.py
 
 ```powershell
 cd bots/neko-anon-bot
+Copy-Item .env.example .env
 python -m venv .venv
 . .venv/Scripts/Activate.ps1
 pip install -r requirements.txt
