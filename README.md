@@ -50,6 +50,7 @@ pnpm check
 ### Run starter bot
 
 ```bash
+cp bots/neko-starter-bot/.env.example bots/neko-starter-bot/.env
 pnpm --filter ./bots/neko-starter-bot dev
 ```
 
@@ -57,6 +58,7 @@ pnpm --filter ./bots/neko-starter-bot dev
 
 ```powershell
 cd bots/neko-gif-caption-bot
+Copy-Item .env.example .env
 python -m venv .venv
 . .venv/Scripts/Activate.ps1
 pip install -r requirements.txt
@@ -67,6 +69,7 @@ python gifbot.py
 
 ```powershell
 cd bots/neko-8ball-bot
+Copy-Item .env.example .env
 python -m venv .venv
 . .venv/Scripts/Activate.ps1
 pip install -r requirements.txt
