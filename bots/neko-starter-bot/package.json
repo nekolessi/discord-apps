@@ -1,41 +1,41 @@
 {
-  "name": "@nekolessi/neko-starter-bot",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "engines": {
-    "node": ">=20.0.0"
-  },
-  "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsup src/index.ts register.ts --format esm --out-dir dist --clean --sourcemap",
-    "start": "node --enable-source-maps dist/src/index.js",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "check": "pnpm typecheck && pnpm lint",
-    "register:guild": "tsx register.ts --scope guild",
-    "register:global": "tsx register.ts --scope global",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
-  },
-  "dependencies": {
-    "discord.js": "^14.16.0",
-    "dotenv": "^17.3.1",
-    "pino": "^9.3.2",
-    "pino-pretty": "^13.1.3",
-    "zod": "^4.3.6"
-  },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@types/node": "^25.5.0",
-    "eslint": "^9.39.4",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.29.1",
-    "globals": "^17.4.0",
-    "prettier": "^3.3.3",
-    "tsup": "^8.5.1",
-    "tsx": "^4.16.2",
-    "typescript": "^5.5.4",
-    "typescript-eslint": "^8.41.0"
-  }
+    "name":  "@nekolessi/neko-starter-bot",
+    "version":  "1.0.0",
+    "private":  true,
+    "type":  "module",
+    "engines":  {
+                    "node":  "\u003e=20.0.0"
+                },
+    "scripts":  {
+                    "dev":  "tsx watch src/index.ts",
+                    "build":  "tsup src/index.ts register.ts --format esm --out-dir dist --clean --sourcemap",
+                    "start":  "node --enable-source-maps dist/src/index.js",
+                    "typecheck":  "tsc -p tsconfig.json --noEmit",
+                    "check":  "pnpm typecheck \u0026\u0026 pnpm lint",
+                    "register:guild":  "tsx register.ts --scope guild",
+                    "register:global":  "tsx register.ts --scope global",
+                    "lint":  "eslint .",
+                    "lint:fix":  "eslint . --fix",
+                    "format":  "prettier --write ."
+                },
+    "dependencies":  {
+                         "discord.js":  "^14.16.0",
+                         "dotenv":  "^17.3.1",
+                         "pino":  "^9.3.2",
+                         "pino-pretty":  "^13.1.3",
+                         "zod":  "^4.3.6"
+                     },
+    "devDependencies":  {
+                            "@eslint/js":  "^10.0.1",
+                            "@types/node":  "^25.5.0",
+                            "eslint":  "^9.39.4",
+                            "eslint-config-prettier":  "^10.1.8",
+                            "eslint-plugin-import":  "^2.29.1",
+                            "globals":  "^17.4.0",
+                            "prettier":  "^3.3.3",
+                            "tsup":  "^8.5.1",
+                            "tsx":  "^4.16.2",
+                            "typescript":  "^5.5.4",
+                            "typescript-eslint":  "^8.57.0"
+                        }
 }
