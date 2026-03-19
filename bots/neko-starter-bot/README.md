@@ -1,6 +1,6 @@
 # Neko Starter Bot
 
-A TypeScript starter Discord bot using discord.js v14.
+A cozy TypeScript starter bot for when you want a clean little `discord.js` base without rebuilding the scratching post from zero.
 
 ## Requirements
 
@@ -39,7 +39,7 @@ Build from repository root:
 docker build -f bots/neko-starter-bot/Dockerfile -t neko-starter-bot:latest .
 ```
 
-Run:
+Run with:
 
 ```bash
 docker run --rm -it --env-file bots/neko-starter-bot/.env neko-starter-bot:latest

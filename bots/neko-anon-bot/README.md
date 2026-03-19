@@ -1,11 +1,11 @@
 # Anonymous Comment Bot
 
-A Python `discord.py` bot for anonymous member comments with moderator-only private replies.
+A shy little `discord.py` helper that lets members send anonymous comments while moderators keep a private reply path.
 
 ## Requirements
 
 - Python 3.11+
-- Discord bot token
+- a Discord bot token
 
 ## Environment Variables
 
@@ -32,13 +32,13 @@ python anonymous_feedback_bot.py
 
 ## Slash Commands
 
-- `/comment` opens an anonymous comment modal for members.
-- `/reply case_id:<id> message:<text>` is for moderators (Manage Messages) and sends a private DM to the original submitter.
-- `/help` shows command usage.
+- `/comment` opens the anonymous comment modal for members
+- `/reply case_id:<id> message:<text>` is for moderators with `Manage Messages`
+- `/help` shows command usage
 
-## How it works
+## How The Bot Works
 
-1. A member runs `/comment` and submits the modal.
-2. The bot posts a plain bot message into `COMMENTS_CHANNEL_ID` with the comment text and a sequential case ID like `MEOW-0001`.
-3. The bot stores `case_id -> user_id` in `CASE_STORE_PATH` so moderators can reply without identity exposure in-channel.
-4. A moderator runs `/reply` with the case ID to DM the original submitter.
+1. A member runs `/comment` and sends their message through the modal.
+2. The bot posts the comment in `COMMENTS_CHANNEL_ID` with a case ID like `MEOW-0001`.
+3. The bot stores `case_id -> user_id` in `CASE_STORE_PATH` so identities stay hidden in-channel.
+4. A moderator runs `/reply` with the case ID and the bot sends the DM privately.
