@@ -8,18 +8,21 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![pnpm workspace](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white)](pnpm-workspace.yaml)
 
-Monorepo for self-hosted Discord bots with shared release automation and CI.
+A cozy cat tower of self-hosted Discord projects: part utility shelf, part chaos shelf, all very neko.
 
-## Bots
+## What Lives In This Cat Tower
 
-| Bot | Stack | Purpose |
+| Bot | Stack | Little job |
 | --- | --- | --- |
-| `neko-starter-bot` | TypeScript + discord.js | Starter slash-command bot template |
-| `neko-gif-caption-bot` | Python + discord.py | Captions GIF/APNG files from Discord |
-| `neko-8ball-bot` | Python + discord.py | Persona-based 8-ball bot with GIF reactions |
-| `neko-anon-bot` | Python + discord.py | Anonymous member comments with moderator DM replies |
+| `neko-starter-bot` | TypeScript + discord.js | Starter slash-command bot for fresh ideas |
+| `neko-gif-caption-bot` | Python + discord.py | Puts captions on GIF and APNG uploads |
+| `neko-8ball-bot` | Python + discord.py | Answers questions with attitude and GIFs |
+| `neko-anon-bot` | Python + discord.py | Collects anonymous comments with private mod replies |
+| `neko-catgirl-bot` | Python + discord.py | Pulls random SFW and NSFW catgirl media |
+| `neko-wordle-helper-bot` | Python + discord.py | Gives Wordle starters, hints, and teaching help |
+| `clip-studio-paint-presence` | TypeScript + Discord RPC | Shows Discord Rich Presence while you draw |
 
-## Repo Layout
+## Layout
 
 ```text
 .
@@ -27,7 +30,10 @@ Monorepo for self-hosted Discord bots with shared release automation and CI.
 |   |-- neko-starter-bot/
 |   |-- neko-gif-caption-bot/
 |   |-- neko-8ball-bot/
-|   `-- neko-anon-bot/
+|   |-- neko-anon-bot/
+|   |-- neko-catgirl-bot/
+|   |-- clip-studio-paint-presence/
+|   `-- neko-wordle-helper-bot/
 |-- scripts/
 |   `-- new-bot.mjs
 |-- .github/workflows/
@@ -38,23 +44,31 @@ Monorepo for self-hosted Discord bots with shared release automation and CI.
 
 ## Quick Start
 
-### Node workspace checks
+### Run shared workspace checks
 
 ```bash
 pnpm install
 pnpm check
 ```
 
-`CI` runs the same Node checks and also validates Python bots by installing their requirements and compiling them.
+`CI` runs the same Node checks and also installs Python requirements to make sure the Python bots still behave.
 
-### Run starter bot
+### Run the starter bot
 
 ```bash
 cp bots/neko-starter-bot/.env.example bots/neko-starter-bot/.env
 pnpm --filter ./bots/neko-starter-bot dev
 ```
 
-### Run GIF caption bot
+### Run Clip Studio Paint Presence
+
+```powershell
+.\run-clip-studio-paint-presence.cmd
+```
+
+On first launch it asks for a Discord `Application ID`, checks that it looks valid, writes it to `bots/clip-studio-paint-presence/.env`, and then starts the app.
+
+### Run the GIF caption bot
 
 ```powershell
 cd bots/neko-gif-caption-bot
@@ -65,7 +79,7 @@ pip install -r requirements.txt
 python gifbot.py
 ```
 
-### Run 8-ball bot
+### Run the 8-ball bot
 
 ```powershell
 cd bots/neko-8ball-bot
@@ -76,7 +90,7 @@ pip install -r requirements.txt
 python neko_8ball_bot.py
 ```
 
-### Run anonymous comment bot
+### Run the anonymous comment bot
 
 ```powershell
 cd bots/neko-anon-bot
@@ -87,13 +101,35 @@ pip install -r requirements.txt
 python anonymous_feedback_bot.py
 ```
 
-## Scaffold a New Node Bot
+### Run the catgirl bot
+
+```powershell
+cd bots/neko-catgirl-bot
+Copy-Item .env.example .env
+python -m venv .venv
+. .venv/Scripts/Activate.ps1
+pip install -r requirements.txt
+python catgirl_bot.py
+```
+
+### Run the Wordle helper bot
+
+```powershell
+cd bots/neko-wordle-helper-bot
+Copy-Item .env.example .env
+python -m venv .venv
+. .venv/Scripts/Activate.ps1
+pip install -r requirements.txt
+python wordle_helper_bot.py
+```
+
+## Scaffold A New Node Bot
 
 ```bash
 pnpm new:bot neko-your-bot
 ```
 
-Then run:
+Then give the new kitten its usual checkup:
 
 ```bash
 pnpm --filter ./bots/neko-your-bot lint
@@ -102,22 +138,22 @@ pnpm --filter ./bots/neko-your-bot build
 pnpm --filter ./bots/neko-your-bot dev
 ```
 
-## Release a Bot
+## Release Flow
 
-Use GitHub Actions workflow `Release Bot`:
+Use the GitHub Actions workflow `Release Bot`:
 
-1. Open Actions -> `Release Bot` -> `Run workflow`.
-2. Set `bot` to the folder name under `bots/` (lowercase kebab-case, example: `neko-starter-bot`).
-3. Set `version` using semver format (example: `v1.0.0`).
-4. Set `publish_release=true` to publish a GitHub release.
+1. Open `Actions`.
+2. Choose `Release Bot`.
+3. Set `bot` to the folder name inside `bots/` such as `neko-starter-bot`.
+4. Set `version` in semver format such as `v1.0.0`.
+5. Set `publish_release=true` if you want a GitHub Release created too.
 
 `Release Bot` supports both Node and Python bot folders.
 
 ## Security
 
-Security policy and reporting guidance:
-- [SECURITY.md](SECURITY.md)
+Security and reporting details live in [SECURITY.md](SECURITY.md).
 
 ## License
 
-MIT - see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
