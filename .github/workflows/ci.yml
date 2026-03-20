@@ -58,7 +58,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        bot: [neko-gif-caption-bot, neko-8ball-bot, neko-anon-bot, neko-catgirl-bot]
+        bot: [neko-gif-caption-bot, neko-8ball-bot, neko-anon-bot, neko-catgirl-bot, neko-wordle-helper-bot]
 
     steps:
       - name: Checkout

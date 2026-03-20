@@ -14,6 +14,8 @@ on:
           - neko-8ball-bot
           - neko-anon-bot
           - neko-catgirl-bot
+          - neko-wordle-helper-bot
+          - clip-studio-paint-presence
       version:
         description: "Version label (example: v1.0.0)"
         required: true

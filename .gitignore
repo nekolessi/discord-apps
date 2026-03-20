@@ -18,6 +18,8 @@ yarn-error.log*
 # local tooling caches
 .cache
 ci-job-logs/
+**/__pycache__/
+*.pyc
 
 # editor
 .vscode/

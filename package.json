@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "pnpm --filter \"./bots/neko-starter-bot\" dev",
+    "clip-studio-paint-presence": "pnpm --filter \"./bots/clip-studio-paint-presence\" build && pnpm --filter \"./bots/clip-studio-paint-presence\" start",
     "build": "pnpm -r --filter \"./bots/*\" build",
     "lint": "pnpm -r --filter \"./bots/*\" lint",
     "typecheck": "pnpm -r --filter \"./bots/*\" typecheck",

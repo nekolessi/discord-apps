@@ -31,6 +31,11 @@ Security fixes are provided for:
 In scope for this repo:
 - `bots/neko-starter-bot/**`
 - `bots/neko-gif-caption-bot/**`
+- `bots/neko-8ball-bot/**`
+- `bots/neko-anon-bot/**`
+- `bots/neko-catgirl-bot/**`
+- `bots/neko-wordle-helper-bot/**`
+- `bots/clip-studio-paint-presence/**`
 - `.github/workflows/**`
 - Root tooling and release automation
 
