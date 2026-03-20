@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# local env
+.venv/
+venv/
+.env
+.env.*.local
+
+# local data
+data/starter_prefs.json

@@ -35,6 +35,7 @@ Notes:
 
 ```powershell
 cd bots/neko-wordle-helper-bot
+Copy-Item .env.example .env
 python -m venv .venv
 . .venv/Scripts/Activate.ps1
 pip install -r requirements.txt

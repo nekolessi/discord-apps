@@ -11,7 +11,7 @@ A playful little Python bot that serves random catgirl media through slash comma
 ## Notes
 
 - SFW media uses `nekos.best`
-- if `gif` is requested for SFW, the bot uses an animated fallback from the same SFW source
+- if `animated` is requested for SFW, the bot uses an animated fallback from the same SFW source
 - NSFW still images use `nekosapi.com`
 - NSFW animated requests use `Danbooru`, which currently returns animated posts as `mp4` or `webm` rather than literal GIF files
 - the bot tries to upload a Discord-playable animated file when the clip is small enough, and falls back to a direct video link when it is not

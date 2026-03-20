@@ -8,6 +8,8 @@ node_modules
 # env
 .env
 .env.*.local
+.venv/
+venv/
 
 # logs
 *.log
@@ -20,8 +22,10 @@ yarn-error.log*
 ci-job-logs/
 **/__pycache__/
 *.pyc
+.pytest_cache/
 
 # editor
 .vscode/
 .idea/
 .DS_Store
+Thumbs.db
