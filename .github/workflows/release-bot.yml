@@ -13,6 +13,7 @@ on:
           - neko-gif-caption-bot
           - neko-8ball-bot
           - neko-anon-bot
+          - neko-catgirl-bot
       version:
         description: "Version label (example: v1.0.0)"
         required: true
